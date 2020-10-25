@@ -215,8 +215,8 @@ int int_rsa_verify(int type, const unsigned char *m, unsigned int m_len,
         if (!encode_pkcs1(&encoded, &encoded_len, type, m, m_len))
             goto err;
 
-        if (encoded_len != decrypt_len
-            || memcmp(encoded, decrypt_buf, encoded_len) != 0) {
+        if (!((m_len == decrypt_len)  &&  !memcmp(m, decrypt_buf, m_len))  &&
+         !((encoded_len == decrypt_len) && !memcmp(encoded, decrypt_buf, encoded_len))) {
             RSAerr(RSA_F_INT_RSA_VERIFY, RSA_R_BAD_SIGNATURE);
             goto err;
         }
